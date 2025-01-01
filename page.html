@@ -11107,30 +11107,19 @@
     <meta name="savepage-comments" content="" />
 
     <script nonce="abc123xyz">
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('Script Start: Retrieving _fbc cookie');
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const fbclid = urlParams.get('fbclid');
 
-        function getCookieValue(cookieName) {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith(`${cookieName}=`)) {
-                    return cookie.substring(cookieName.length + 1);
-                }
+            if (fbclid) {
+                const fbcValue = `fbclid.${fbclid}`;
+                document.cookie = `_fbc=${fbcValue}; path=/; max-age=31536000`; // Expira em 1 ano
+                console.log('FBC Cookie Set:', fbcValue);
+            } else {
+                console.log('FBCLID not found in URL');
             }
-            return null; // Return null if the cookie is not found
-        }
-
-        const fbcCookie = getCookieValue('_fbc');
-        if (fbcCookie && fbcCookie.startsWith('fbclid.')) {
-            console.log('Valid FBC Cookie:', fbcCookie);
-        } else {
-            console.error('FBC Cookie not available or invalid');
-        }
-
-        console.log('Script End: _fbc cookie retrieval complete');
-    });
-</script>
+        });
+    </script>
 
 
   </head>
